@@ -31,10 +31,7 @@ class Answer extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
             textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         child: Text(_answerText),
-        onPressed: () {
-          // window.alert('Answer 1');
-          _selectHandler();
-        },
+        onPressed: _selectHandler,
       ),
     );
   }
