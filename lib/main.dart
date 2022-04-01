@@ -40,8 +40,8 @@ class _MyAppState extends State<MyApp> {
     // simpan jawaban pengguna
     jawabanPengguna.add(answer);
 
-    print(_questionIndex);
-    print(jawabanPengguna);
+    // print(_questionIndex);
+    // print(jawabanPengguna);
   }
 
   @override
@@ -55,7 +55,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
           appBar: AppBar(
-            title: const Text('My first app'),
+            title: const Text('Aplikasi suka suka'),
           ),
           body: _questionIndex < questions.length
               ? Column(
@@ -81,8 +81,8 @@ class _MyAppState extends State<MyApp> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                          'Jawaban Anda:' +
-                              '\nWarna Favorite: ' +
+                          'Jawaban Anda:'
+                                  '\nWarna Favorite: ' +
                               jawabanPengguna.elementAt(0) +
                               '\nHewan Favorite: ' +
                               jawabanPengguna.elementAt(1) +
@@ -100,15 +100,19 @@ class _MyAppState extends State<MyApp> {
                                 fontSize: 20, fontWeight: FontWeight.bold)),
                         child: const Text('Restart'),
                         onPressed: () {
-                          setState(() {
-                            _questionIndex = 0;
-                          });
-                          jawabanPengguna = [];
+                          resetPressed();
                         },
                       )
                     ],
                   ),
                 )),
     );
+  }
+
+  void resetPressed() {
+    setState(() {
+      _questionIndex = 0;
+    });
+    jawabanPengguna = [];
   }
 }
