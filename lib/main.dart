@@ -33,16 +33,15 @@ class _MyAppState extends State<MyApp> {
 
   var jawabanPengguna = [];
 
-  void _answerQuestion() {
+  void _answerQuestion(String answer) {
     setState(() {
       _questionIndex = _questionIndex + 1;
     });
     // simpan jawaban pengguna
-    var _ = questions[_questionIndex - 1]['answers'] as List<String>;
-    jawabanPengguna.add(_.elementAt(0));
+    jawabanPengguna.add(answer);
 
-    print(_questionIndex);
-    print(jawabanPengguna);
+    // print(_questionIndex);
+    // print(jawabanPengguna);
   }
 
   @override
@@ -56,7 +55,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
           appBar: AppBar(
-            title: const Text('My first app'),
+            title: const Text('Aplikasi suka suka'),
           ),
           body: _questionIndex < questions.length
               ? Column(
@@ -69,7 +68,9 @@ class _MyAppState extends State<MyApp> {
                     // )
                     ...(questions[_questionIndex]['answers'] as List<String>)
                         .map((answer) {
-                      return Answer(answer, _answerQuestion);
+                      return Answer(answer, () {
+                        _answerQuestion(answer);
+                      });
                     }).toList()
                   ],
                 )
@@ -80,34 +81,38 @@ class _MyAppState extends State<MyApp> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                          'Jawaban Anda:' +
-                              '\nWarna Favorite: ' +
+                          'Jawaban Anda:'
+                                  '\nWarna Favorite: ' +
                               jawabanPengguna.elementAt(0) +
                               '\nHewan Favorite: ' +
                               jawabanPengguna.elementAt(1) +
                               '\nMakanan Favorite: ' +
                               jawabanPengguna.elementAt(2) +
                               '\n',
-                          style: TextStyle(fontSize: 20),
+                          style: const TextStyle(fontSize: 20),
                           textAlign: TextAlign.center),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             primary: Colors.blue[400],
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 30, vertical: 20),
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold)),
-                        child: Text('Restart'),
+                        child: const Text('Restart'),
                         onPressed: () {
-                          setState(() {
-                            _questionIndex = 0;
-                          });
-                          jawabanPengguna = [];
+                          resetPressed();
                         },
                       )
                     ],
                   ),
                 )),
     );
+  }
+
+  void resetPressed() {
+    setState(() {
+      _questionIndex = 0;
+    });
+    jawabanPengguna = [];
   }
 }
