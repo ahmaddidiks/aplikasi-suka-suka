@@ -31,23 +31,27 @@ class _MyAppState extends State<MyApp> {
     }
   ];
 
-  var jawabanPengguna = [];
+  List<String> jawabanPengguna = [];
 
   void _answerQuestion(String answer) {
+    // jika selesai reset jawaban
+
     setState(() {
       _questionIndex = _questionIndex + 1;
     });
-    // simpan jawaban pengguna
-    jawabanPengguna.add(answer);
 
-    // print(_questionIndex);
-    // print(jawabanPengguna);
+    _questionIndex > questions.length
+        ? {
+            jawabanPengguna = [],
+            setState(() {
+              _questionIndex = 0;
+            })
+          }
+        : jawabanPengguna.add(answer);
   }
 
   @override
   Widget build(BuildContext context) {
-    // questions with maps => in python is dictionary
-
     // final answer_widget = (questions[_questionIndex]['answers'] as List<String>)
     //     .map((e) => Answer(e, _answerQuestion))
     //     .toList();
@@ -57,62 +61,60 @@ class _MyAppState extends State<MyApp> {
           appBar: AppBar(
             title: const Text('Aplikasi suka suka'),
           ),
-          body: _questionIndex < questions.length
-              ? Column(
-                  children: [
-                    Question(
-                      questions[_questionIndex]['question'] as String,
-                    ),
-                    // Column(
-                    //   children: answer_widget,
-                    // )
-                    ...(questions[_questionIndex]['answers'] as List<String>)
-                        .map((answer) {
-                      return Answer(answer, () {
-                        _answerQuestion(answer);
-                      });
-                    }).toList()
-                  ],
-                )
-              : Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                          'Jawaban Anda:'
-                                  '\nWarna Favorite: ' +
-                              jawabanPengguna.elementAt(0) +
-                              '\nHewan Favorite: ' +
-                              jawabanPengguna.elementAt(1) +
-                              '\nMakanan Favorite: ' +
-                              jawabanPengguna.elementAt(2) +
-                              '\n',
-                          style: const TextStyle(fontSize: 20),
-                          textAlign: TextAlign.center),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            primary: Colors.blue[400],
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 30, vertical: 20),
-                            textStyle: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold)),
-                        child: const Text('Restart'),
-                        onPressed: () {
-                          resetPressed();
-                        },
-                      )
-                    ],
-                  ),
-                )),
+          body: _questionIndex < questions.length ? quiz() : result()),
     );
   }
 
-  void resetPressed() {
-    setState(() {
-      _questionIndex = 0;
-    });
-    jawabanPengguna = [];
+  Column quiz() {
+    return Column(
+      children: [
+        Question(
+          questions[_questionIndex]['question'] as String,
+        ),
+        // Column(
+        //   children: answer_widget,
+        // )
+        ...(questions[_questionIndex]['answers'] as List<String>).map((answer) {
+          return Answer(answer, () {
+            _answerQuestion(answer);
+          });
+        }).toList()
+      ],
+    );
+  }
+
+  Center result() {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+              'Jawaban Anda:'
+                      '\nWarna Favorite: ' +
+                  jawabanPengguna.elementAt(0) +
+                  '\nHewan Favorite: ' +
+                  jawabanPengguna.elementAt(1) +
+                  '\nMakanan Favorite: ' +
+                  jawabanPengguna.elementAt(2) +
+                  '\n',
+              style: const TextStyle(fontSize: 20),
+              textAlign: TextAlign.center),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                primary: Colors.blue[400],
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                textStyle:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            child: const Text('Restart'),
+            onPressed: () {
+              _answerQuestion('');
+            },
+          )
+        ],
+      ),
+    );
   }
 }
